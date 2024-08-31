@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Shopping List</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+
+  <body class="flex justify-center items-center h-screen">
+    <main class="flex flex-col max-w-xl">
+      <div class="todo">
+        <div class="header min-w-56">
+          <h1 class="text-center text-xl">Shopping List</h1>
+          <div class="todolist">
+            <ul>
+              <li class="flex">
+                <input
+                  type="checkbox"
+                  class="delete-checkbox mr-2 before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 hover:before:opacity-10"
+                />
+                <span>Przykład</span>
+              </li>
+            </ul>
+          </div>
+          <input
+            type="text"
+            class="todo-input focus:border-none focus:outline-none"
+            placeholder="Add Item"
+            autofocus
+          />
+        </div>
+      </div>
+    </main>
+
+    <script src="/static/script.js"></script>
+  </body>
+</html>
