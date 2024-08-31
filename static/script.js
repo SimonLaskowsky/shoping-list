@@ -2,6 +2,35 @@ let toDoInput;
 let ulList;
 let newToDo;
 
+const listItemTemplate = `
+  <div class="cbx">
+    <input type="checkbox" class="delete-checkbox" id="cbx" />
+    <label for="cbx"></label>
+    <svg width="15" height="14" viewBox="0 0 15 14" fill="none">
+      <path d="M2 8.36364L6.23077 12L13 2"></path>
+    </svg>
+
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+      <defs>
+        <filter id="goo">
+          <feGaussianBlur
+            in="SourceGraphic"
+            stdDeviation="4"
+            result="blur"
+          />
+          <feColorMatrix
+            in="blur"
+            mode="matrix"
+            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7"
+            result="goo"
+          />
+          <feBlend in="SourceGraphic" in2="goo" />
+        </filter>
+      </defs>
+    </svg>
+  </div>
+`;
+
 const main = () => {
   prepareDOMElements();
   prepareDOMEvents();
@@ -30,15 +59,11 @@ const addNewTodoToDatabase = (newText) => {
 };
 
 const addNewToDo = (text, id = null) => {
-  //create list element with flex class
+  //create list element
   newToDo = document.createElement("li");
+  //put template to our new element
   newToDo.classList.add("flex");
-
-  //create and add checbox to the list element
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.classList.add("delete-checkbox", "mr-2");
-  newToDo.appendChild(checkbox);
+  newToDo.innerHTML = listItemTemplate;
 
   //add id dataset to elements
   if (id) {
@@ -85,7 +110,6 @@ const checkClick = (e) => {
     if (todoId) {
       deleteTodo(todoId);
     }
-
     e.target.closest("li").remove();
   } else if (e.target.tagName === "SPAN") {
     const clickedLi = e.target.closest("li");
@@ -106,23 +130,33 @@ const makeEditable = (li) => {
     "w-1/2"
   );
 
+  // Zapisz stan checkboxa
   const checkbox = li.querySelector(".delete-checkbox");
-  li.innerHTML = "";
-  li.appendChild(checkbox);
+  const wasChecked = checkbox.checked;
+
+  // Użyj szablonu
+  li.innerHTML = listItemTemplate;
+
   li.appendChild(input);
+  checkbox.checked = wasChecked;
+
   input.focus();
 
   input.addEventListener("blur", () => {
     const span = document.createElement("span");
     span.textContent = input.value || " ";
-    li.innerHTML = "";
-    li.appendChild(checkbox);
+
+    // Użyj szablonu
+    li.innerHTML = listItemTemplate;
+
     li.appendChild(span);
+    const newCheckbox = li.querySelector(".delete-checkbox");
+    newCheckbox.checked = wasChecked;
 
     const todoId = li.dataset.id;
 
     if (todoId) {
-      updateTodo(todoId, input.value || " ", checkbox.checked);
+      updateTodo(todoId, input.value || " ", newCheckbox.checked);
     }
   });
 
@@ -130,14 +164,18 @@ const makeEditable = (li) => {
     if (e.key === "Enter") {
       const span = document.createElement("span");
       span.textContent = input.value || " ";
-      li.innerHTML = "";
-      li.appendChild(checkbox);
+
+      // Użyj szablonu
+      li.innerHTML = listItemTemplate;
+
       li.appendChild(span);
+      const newCheckbox = li.querySelector(".delete-checkbox");
+      newCheckbox.checked = wasChecked;
 
       const todoId = li.dataset.id;
 
       if (todoId) {
-        updateTodo(todoId, input.value || " ", checkbox.checked); // Wywołanie updateTodo
+        updateTodo(todoId, input.value || " ", newCheckbox.checked);
       }
     }
   });
