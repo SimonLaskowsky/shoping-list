@@ -1,5 +1,28 @@
 * {
   box-sizing: border-box;
+  font-family: "Work Sans", sans-serif;
+  font-weight: 500;
+  color: #292d34;
+}
+
+.todolist ul li {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  transition: 0.3s;
+  border-radius: 10px;
+}
+
+.todolist ul li:hover {
+  background-color: rgb(247, 247, 247);
+}
+
+.todolist span {
+  font-weight: 500;
+}
+
+.todo h1 {
+  font-weight: 600;
 }
 
 input[type="checkbox"] {
@@ -15,24 +38,28 @@ input[type="checkbox"]:focus {
   outline: 0;
 }
 
+.todolist ul li:has(input[type="checkbox"]:hover) {
+  animation: shake 0.5s;
+}
+
 .cbx {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   position: relative;
   margin-right: 10px;
 }
 
 .cbx input {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border: 2px solid #bfbfc0;
   border-radius: 50%;
   transition: all 0.2s ease;
 }
 
 .cbx label {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   background: none;
   border-radius: 50%;
   position: absolute;
@@ -46,18 +73,18 @@ input[type="checkbox"]:focus {
 
 .cbx svg {
   position: absolute;
-  top: 5px;
-  left: 4px;
+  top: 3px;
+  left: 3px;
   z-index: 1;
   pointer-events: none;
 }
 
 .cbx svg path {
-  stroke: white;
+  stroke: transparent;
   stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 19;
+  stroke-dasharray: 16;
   stroke-dashoffset: 19;
   transition: all 0.4s ease;
 }
@@ -67,7 +94,14 @@ input[type="checkbox"]:focus {
 }
 
 .cbx input:checked + label + svg path {
-  stroke-dashoffset: 0;
+  stroke-dashoffset: 1;
+  stroke: white;
+}
+
+.todolist ul li:has(input[type="checkbox"]:checked) {
+  animation: hide 1s;
+  animation-delay: 0.5s;
+  background-color: rgb(247, 247, 247);
 }
 
 @keyframes splash {
@@ -86,5 +120,36 @@ input[type="checkbox"]:focus {
     box-shadow: 0 -32px 0 -10px transparent, 28px -16px 0 -10px transparent,
       28px 16px 0 -10px transparent, 0 32px 0 -10px transparent,
       -28px 16px 0 -10px transparent, -28px -16px 0 -10px transparent;
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  50% {
+    transform: translateX(2px);
+  }
+  75% {
+    transform: translateX(-1px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes hide {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0;
   }
 }

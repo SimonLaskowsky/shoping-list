@@ -1,34 +1,35 @@
 let toDoInput;
 let ulList;
 let newToDo;
+let delay;
 
 const listItemTemplate = `
-  <div class="cbx">
-    <input type="checkbox" class="delete-checkbox" id="cbx" />
-    <label for="cbx"></label>
-    <svg width="15" height="14" viewBox="0 0 15 14" fill="none">
-      <path d="M2 8.36364L6.23077 12L13 2"></path>
-    </svg>
+    <div class="cbx">
+      <input type="checkbox" class="delete-checkbox" id="cbx" />
+      <label for="cbx"></label>
+      <svg width="15" height="14" viewBox="0 0 15 14" fill="none">
+        <path d="M2 8.36364L6.23077 12L13 2"></path>
+      </svg>
 
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-      <defs>
-        <filter id="goo">
-          <feGaussianBlur
-            in="SourceGraphic"
-            stdDeviation="4"
-            result="blur"
-          />
-          <feColorMatrix
-            in="blur"
-            mode="matrix"
-            values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7"
-            result="goo"
-          />
-          <feBlend in="SourceGraphic" in2="goo" />
-        </filter>
-      </defs>
-    </svg>
-  </div>
+      <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+        <defs>
+          <filter id="goo">
+            <feGaussianBlur
+              in="SourceGraphic"
+              stdDeviation="4"
+              result="blur"
+            />
+            <feColorMatrix
+              in="blur"
+              mode="matrix"
+              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7"
+              result="goo"
+            />
+            <feBlend in="SourceGraphic" in2="goo" />
+          </filter>
+        </defs>
+      </svg>
+    </div>
 `;
 
 const main = () => {
@@ -94,7 +95,7 @@ const updateTodo = (todoId, newItem, newChecked) => {
   }).then((response) => response.json());
 };
 
-const deleteTodo = (todoId) => {
+const deleteTodoFromDb = (todoId) => {
   fetch(`/todos/${todoId}`, {
     method: "DELETE",
     headers: {
@@ -108,9 +109,12 @@ const checkClick = (e) => {
   if (e.target.classList.contains("delete-checkbox")) {
     const todoId = e.target.closest("li").dataset.id;
     if (todoId) {
-      deleteTodo(todoId);
+      deleteTodoFromDb(todoId);
     }
-    e.target.closest("li").remove();
+    //wait for animation before deleting
+    setTimeout(() => {
+      e.target.closest("li").remove();
+    }, 1000);
   } else if (e.target.tagName === "SPAN") {
     const clickedLi = e.target.closest("li");
     if (clickedLi) {
@@ -193,8 +197,19 @@ const fetchTodos = () => {
   fetch("/todos")
     .then((response) => response.json())
     .then((todos) => {
-      todos.forEach((todo) => {
+      todos.forEach((todo, index) => {
         addNewToDo(todo.item, todo.id);
+
+        const liElement = ulList.querySelectorAll("li")[index];
+        liElement.style.transform = "translateY(100%)";
+        liElement.style.opacity = "0";
+        delay = 200 + index * 100; // Bazowe opóźnienie + rosnące opóźnienie dla każdego elementu
+        setTimeout(() => {
+          liElement.style.transform = "translateY(0)";
+          liElement.style.opacity = 1;
+          liElement.style.transition =
+            "transform 0.5s ease-out, opacity 0.5s ease-out";
+        }, delay);
       });
     });
 };
