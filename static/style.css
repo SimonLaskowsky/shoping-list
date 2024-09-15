@@ -7,7 +7,7 @@
 
 .todolist ul li {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: 5px 10px;
   transition: 0.3s;
   border-radius: 10px;
@@ -19,6 +19,8 @@
 
 .todolist span {
   font-weight: 500;
+  width: -webkit-fill-available;
+  line-break: anywhere;
 }
 
 .todo h1 {
@@ -50,6 +52,7 @@ input[type="checkbox"]:focus {
 }
 
 .cbx input {
+  margin-top: 2px;
   width: 20px;
   height: 20px;
   border: 2px solid #bfbfc0;
